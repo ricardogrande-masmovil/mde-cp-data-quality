@@ -1,4 +1,4 @@
-from provider import LlmProvider
+from agents.provider import LlmProvider
 import time
 
 class BaseAgent:
@@ -45,7 +45,7 @@ class BaseAgent:
 
             response_text = response.choices[0].message.content
             print(response_text)
-            time.sleep(5) # TODO: defensive sleep to avoid rate limiting, should be handled in a better way
+            time.sleep(0.5) # TODO: defensive sleep to avoid rate limiting, should be handled in a better way
 
             # response_text = get_mock_response(0)
 
@@ -69,7 +69,7 @@ class BaseAgent:
                 self.add_messages([response_text, f"Error: {e}"])
                 return
 
-        return
+        return self._messages
     
     def reasoning(self, response_text):
         """Extract the tool from the response text. 

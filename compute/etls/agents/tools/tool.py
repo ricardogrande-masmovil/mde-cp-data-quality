@@ -26,19 +26,22 @@ class SmartKeyWordConceptRegistry(Tool):
     def __init__(self):
         super().__init__(
             name="Smart Keyword Concept Registry",
-            description="Stores keywords related to concepts in a dictionary.",
+            description="Stores keywords related to concepts in a dictionary. Pass the concept and a list of keywords to store them.",
             action=self._store_more_keywords
         )
 
         self._keywords_file = 'keywords.json'
 
-    def _store_more_keywords(self, concept: str, keywords: list[str], *args, **kwargs):
+    def _store_more_keywords(self, input: dict, *args, **kwargs):
         """Store more keywords for a concept in the registry, ensuring only new keywords are added.
 
         Args:
             concept (str): The concept to store keywords for.
             keywords (list[str]): The list of keywords to store.
         """
+        concept = input.get('concept')
+        keywords = input.get('keywords')
+
         with open(self._keywords_file, 'r') as file:
             keywords_dict = json.load(file)
 

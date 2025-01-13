@@ -1,8 +1,8 @@
-from agent import BaseAgent
-from provider import LlmProvider
+from agents.agent import BaseAgent
+from agents.provider import LlmProvider
 
-from tools.tool import SmartKeyWordConceptRegistry, SmartKeyWordConceptFetcher
-from tools.tool_inventory import Inventory
+from agents.tools.tool import SmartKeyWordConceptRegistry, SmartKeyWordConceptFetcher
+from agents.tools.tool_inventory import Inventory
 import re
 import json
 
@@ -17,8 +17,8 @@ class JobPositionTipificationAgent(BaseAgent):
     - Job responsibilities: stored as 'job_responsibilities'
     - Soft skills: stored as 'soft_skills'
     - Hard skills: stored as 'hard_skills'
-    You are restricted to only using 3 keywords for every request received. Make sure to use the existing keywords if suitable. Only add new keywords if there are no existing ones that fit the context.
-    Ensure to store the new keywords in the registry before responding to the user with the keywords.
+    You are restricted to only using 3 keywords for every request received. Make sure to use the existing keywords if suitable. It is mandatory to 
+    add any new keyword to the registry. Ensure only new keywords are added. Ensure you use a tool to store the new keywords.
       
     You have access to a set of tools that will help you fetch the existing concepts and keywords, and to store new ones. 
     - inventory: a list of all available tools and their descriptions. Make sure to use this tool before using any other tool.
@@ -42,6 +42,8 @@ class JobPositionTipificationAgent(BaseAgent):
         "tool_input": "[keywords separated by commas]"
     }
 
+    Ensure you update the registry if necessary before responding to the user.
+
     '''
 
     def __init__(self, provider: LlmProvider):
@@ -60,8 +62,8 @@ class JobPositionTipificationAgent(BaseAgent):
 
         if response_json.get("tool") == "response":
             self.__finished = True
-            registry = self._inventory.get_tool("Smart Keyword Concept Registry")
-            registry.execute("job_responsibilities", response_json.get("tool_input").split(","))
+            #registry = self._inventory.get_tool("Smart Keyword Concept Registry")
+            #registry.execute("job_responsibilities", response_json.get("tool_input").split(","))
             return response_json.get("tool_input", "")
         else:
             thought = response_json.get("thought", "")
