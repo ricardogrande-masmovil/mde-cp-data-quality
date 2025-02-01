@@ -45,7 +45,7 @@ class BaseAgent:
 
             response_text = response.choices[0].message.content
             print(response_text)
-            time.sleep(0.5) # TODO: defensive sleep to avoid rate limiting, should be handled in a better way
+            time.sleep(1) # TODO: defensive sleep to avoid rate limiting, should be handled in a better way
 
             # response_text = get_mock_response(0)
 
