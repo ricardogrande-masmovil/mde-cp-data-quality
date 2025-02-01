@@ -32,7 +32,7 @@ client = OpenAI(api_key=api_key)
 LlmProvider = LlmProvider(model='gpt-4o-mini', client=client)
 
 # Read silver data (only 20 rows)
-df = pd.read_parquet('s3/silver/real-or-fake-fake-jobposting-prediction.parquet')[0:10]
+df = pd.read_parquet('s3/silver/real-or-fake-fake-jobposting-prediction.parquet')[0:5]
 
 df['job_responsibilities'] = df.apply(lambda x: process_col('job_responsibilities', x['description']), axis=1)
 df['hard_skills'] = df.apply(lambda x: process_col('hard_skills', x['requirements']), axis=1)

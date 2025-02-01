@@ -1,5 +1,6 @@
 from typing import Callable
 import json
+import ast
 
 
 
@@ -26,7 +27,7 @@ class SmartKeyWordConceptRegistry(Tool):
     def __init__(self):
         super().__init__(
             name="Smart Keyword Concept Registry",
-            description="Stores keywords related to concepts in a dictionary. Pass the concept and a list of keywords to store them.",
+            description="Stores keywords related to concepts in a dictionary. Pass the concept and a list of keywords to store them. Example: {'concept': 'job_responsibilities', 'keywords': ['keyword1', 'keyword2', 'keyword3']}",
             action=self._store_more_keywords
         )
 
@@ -39,18 +40,29 @@ class SmartKeyWordConceptRegistry(Tool):
             concept (str): The concept to store keywords for.
             keywords (list[str]): The list of keywords to store.
         """
+        if isinstance(input, str) and input != "":
+            # convert string to dict
+            input = ast.literal_eval(input)
+
         concept = input.get('concept')
+        if concept is None:
+            print("Concept is None")
         keywords = input.get('keywords')
+        if keywords is None:
+            print("Keywords are None")
 
         with open(self._keywords_file, 'r') as file:
             keywords_dict = json.load(file)
 
         if concept in keywords_dict:
             existing_keywords = set(keywords_dict[concept])
-            new_keywords = [keyword for keyword in keywords if keyword not in existing_keywords]
+            new_keywords = [keyword for keyword in keywords if keyword not in existing_keywords and keyword is not None]
             keywords_dict[concept].extend(new_keywords)
         else:
-            keywords_dict[concept] = keywords
+            if keywords is not None:
+                keywords_dict[concept] = keywords
+            else:
+                keywords_dict[concept] = []
 
         with open(self._keywords_file, 'w') as file:
             json.dump(keywords_dict, file)

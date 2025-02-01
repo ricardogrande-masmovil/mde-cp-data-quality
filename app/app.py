@@ -42,7 +42,7 @@ def load_data():
     list_columns = ['job_responsibilities', 'hard_skills', 'soft_skills']
     for col in list_columns:
         if col in df.columns:
-            df[col] = df[col].apply(lambda x: ', '.join(x) if isinstance(x, (list, np.ndarray)) else x)
+            df[col] = df[col].apply(lambda x: ", ".join(x.replace('[', '').replace(']', '').split("' '"))[1:-1]) # ñapa mode on
     
     return df
 
